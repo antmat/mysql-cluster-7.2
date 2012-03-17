@@ -116,8 +116,13 @@ case "${1:-''}" in
 	$SELF start 
 	;;
 
+  'restart-initial')
+	set +e; $SELF stop; set -e
+	$SELF start-initial 
+	;;
   *)
-	echo "Usage: $SELF start|stop|restart|force-reload"
+	echo "Usage: $SELF start|stop|restart|force-reload|start-initial|restart-initial"
+	echo "options with initial postfix force config reload. Other option DO NOT RELOAD CONFIG";
 	exit 1
 	;;
 esac
