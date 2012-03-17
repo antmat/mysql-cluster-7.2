@@ -76,6 +76,27 @@ case "${1:-''}" in
 	fi			  
 	;;
 
+  'start-initial')
+        # Perform an initial start of ndbd-mgm
+        if is_true $START_DAEMON; then
+          log_daemon_msg "Initial start of MySQL NDB Management Node(reloading config cache)" "ndbd-mgm"
+          if start-stop-daemon \
+                --start \
+                --exec $DAEMON \
+                --user mysql \
+                -- \
+                -f $CONF \
+                --initial
+          then
+            log_end_msg 0
+          else
+            log_end_msg 1
+            log_warning_msg "Please take a look at the syslog."
+            exit 1
+          fi
+        fi
+        ;;
+
   'stop')
   	log_daemon_msg "Stopping MySQL NDB Management Node" "ndb_mgmd"	
 	if start-stop-daemon \
